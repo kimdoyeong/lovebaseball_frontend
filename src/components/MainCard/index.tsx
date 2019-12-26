@@ -1,6 +1,11 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { smallDesktop, middleDesktop } from "../../lib/viewport";
+import {
+  smallDesktop,
+  middleDesktop,
+  tablet,
+  largeMobile
+} from "../../lib/viewport";
 
 const Wrap = styled.div`
   margin-top: 100px;
@@ -18,6 +23,13 @@ const Card = styled.article`
   `)}
   ${smallDesktop.max(css`
     font-size: 14px;
+  `)}
+  ${tablet.max(css`
+    padding: 2em 2em;
+  `)}
+  ${largeMobile.max(css`
+    padding: 2em 1.5em;
+    margin: 1em;
   `)}
 `;
 

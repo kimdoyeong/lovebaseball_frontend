@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import makeEmojiResponsive from "../../lib/functions/makeEmojiResponsive";
-import { smallDesktop, middleDesktop, tablet } from "../../lib/viewport";
+import {
+  smallDesktop,
+  middleDesktop,
+  tablet,
+  smallTablet,
+  largeMobile
+} from "../../lib/viewport";
 import Button from "../Form/Button";
 
 interface PlayerProps {
@@ -15,32 +21,40 @@ const Player = styled.div<PlayerProps>`
   }
   .row {
     display: flex;
+    ${largeMobile.max(css`
+      flex-direction: column;
+    `)}
   }
   .top {
     display: flex;
     width: 100%;
     max-width: 100%;
+
+    ${smallTablet.max(css`
+      flex-direction: column;
+    `)}
     .profile {
       width: 270px;
-      min-width: 270px;
       height: 270px;
-      min-height: 270px;
       border-radius: 135px;
-      background: gray;
+      background: url(https://image.chosun.com/sitedata/image/201903/20/2019032000679_0.jpg);
+      background-size: cover;
+      background-position: center;
 
       ${middleDesktop.max(css`
         width: 250px;
         height: 250px;
-        min-width: 250px;
-        min-height: 250px;
         border-radius: 125px;
       `)}
       ${tablet.max(css`
         width: 150px;
         height: 150px;
-        min-width: 150px;
-        min-height: 150px;
         border-radius: 75px;
+      `)}
+      ${smallTablet.max(css`
+        width: 100%;
+        height: 200px;
+        border-radius: 0;
       `)}
     }
     .info {
@@ -50,8 +64,12 @@ const Player = styled.div<PlayerProps>`
       flex-direction: column;
       overflow-x: hidden;
       flex: 1;
+      position: relative;
       ${tablet.max(css`
         margin-top: 1em;
+      `)}
+      ${largeMobile.max(css`
+        margin-left: 0;
       `)}
 
       .personality {
@@ -76,13 +94,42 @@ const Player = styled.div<PlayerProps>`
         ${smallDesktop.min(css`
           display: none;
         `)}
+        ${largeMobile.max(css`
+          display: block;
+          margin-top: 1em;
+        `)}
       }
       .awardsWrap {
         margin-left: 3em;
         display: flex;
+        .close {
+          display: none;
+          cursor: pointer;
+          float: right;
+          padding: 5px;
+          padding-top: 0;
+        }
         ${smallDesktop.max(
           css`
             display: none;
+            .close {
+              display: block;
+            }
+            &.open {
+              display: block;
+              position: absolute;
+              background: white;
+              top: 67px;
+              right: 5px;
+              margin: 0;
+              padding: 1.5em;
+              box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+              max-height: 100px;
+              overflow-y: auto;
+              .awards {
+                margin: 0;
+              }
+            }
           `
         )}
         .awards {
@@ -118,6 +165,7 @@ const SliverSlugger = makeEmojiResponsive("🏅", "Silver Slugger");
 const AllStar = makeEmojiResponsive("⭐", "All-star");
 const Spark = makeEmojiResponsive("✨", "spark");
 function FullSizePlayer() {
+  const [openAwards, setOpenAwards] = useState(false);
   return (
     <Player teamColor="#BF111A">
       <div className="top">
@@ -130,12 +178,23 @@ function FullSizePlayer() {
               <p className="sub">AL MVP</p>
             </div>
             <div className="awards-button">
-              <Button>
+              <Button onClick={() => setOpenAwards(v => !v)}>
                 <Spark />
                 Awards
               </Button>
             </div>
-            <div className="awardsWrap">
+            <div
+              className={["awardsWrap", openAwards && "open"]
+                .filter(Boolean)
+                .join(" ")}
+            >
+              <div
+                className="close"
+                onClick={() => setOpenAwards(false)}
+                role="button"
+              >
+                &times;
+              </div>
               <div className="awards">
                 <p>
                   MVP
