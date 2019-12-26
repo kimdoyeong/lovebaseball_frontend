@@ -8,7 +8,7 @@ import {
 } from "../../lib/viewport";
 
 const Wrap = styled.div`
-  margin-top: 100px;
+  margin-top: 10vh;
 `;
 const Card = styled.article`
   background: white;
@@ -22,7 +22,7 @@ const Card = styled.article`
     font-size: 16px;
   `)}
   ${smallDesktop.max(css`
-    font-size: 14px;
+    font-size: 13px;
   `)}
   ${tablet.max(css`
     padding: 2em 2em;
