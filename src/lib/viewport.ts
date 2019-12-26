@@ -1,20 +1,21 @@
 import { css, FlattenSimpleInterpolation } from "styled-components";
 
-export function makeViewport(size: string) {
+export function makeViewport(size: number) {
   return {
     max: (style: FlattenSimpleInterpolation) => css`
-      @media (max-width: ${size}) {
+      @media (max-width: ${size}px) {
         ${style}
       }
     `,
     min: (style: FlattenSimpleInterpolation) => css`
-      @media (min-width: ${size}) {
+      @media (min-width: ${size + 1}px) {
         ${style}
       }
     `
   };
 }
 
-export const smallDesktop = makeViewport("1080px");
-export const middleDesktop = makeViewport("1534px");
-export const hd = makeViewport("960px");
+export const smallDesktop = makeViewport(1100);
+export const middleDesktop = makeViewport(1534);
+export const hd = makeViewport(960);
+export const tablet = makeViewport(768);
