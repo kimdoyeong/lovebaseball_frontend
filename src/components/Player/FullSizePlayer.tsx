@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled, { css } from "styled-components";
 import makeEmojiResponsive from "../../lib/functions/makeEmojiResponsive";
 import {
@@ -64,7 +64,6 @@ const Player = styled.div<PlayerProps>`
       flex-direction: column;
       overflow-x: hidden;
       flex: 1;
-      position: relative;
       ${tablet.max(css`
         margin-top: 1em;
       `)}
@@ -166,6 +165,28 @@ const AllStar = makeEmojiResponsive("⭐", "All-star");
 const Spark = makeEmojiResponsive("✨", "spark");
 function FullSizePlayer() {
   const [openAwards, setOpenAwards] = useState(false);
+  const [coords, setCoords] = useState([0, 0]);
+
+  function openAwardsEvent(e: React.MouseEvent) {
+    const minSize = 300;
+    setCoords([
+      window.innerWidth - minSize < e.pageX
+        ? window.innerWidth - minSize
+        : e.pageX,
+      e.pageY
+    ]);
+    setOpenAwards(true);
+  }
+  const closeAwardsEvent = useCallback(() => {
+    if (!openAwards) return;
+    setOpenAwards(false);
+  }, [openAwards]);
+
+  useEffect(() => {
+    window.addEventListener("click", closeAwardsEvent);
+
+    return () => window.removeEventListener("click", closeAwardsEvent);
+  }, [closeAwardsEvent]);
   return (
     <Player teamColor="#BF111A">
       <div className="top">
@@ -178,7 +199,7 @@ function FullSizePlayer() {
               <p className="sub">AL MVP</p>
             </div>
             <div className="awards-button">
-              <Button onClick={() => setOpenAwards(v => !v)}>
+              <Button onClick={openAwardsEvent}>
                 <Spark />
                 Awards
               </Button>
@@ -187,12 +208,12 @@ function FullSizePlayer() {
               className={["awardsWrap", openAwards && "open"]
                 .filter(Boolean)
                 .join(" ")}
+              style={{
+                top: coords[1] + "px",
+                left: coords[0] + "px"
+              }}
             >
-              <div
-                className="close"
-                onClick={() => setOpenAwards(false)}
-                role="button"
-              >
+              <div className="close" onClick={closeAwardsEvent} role="button">
                 &times;
               </div>
               <div className="awards">
