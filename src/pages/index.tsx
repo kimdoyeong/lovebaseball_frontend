@@ -8,6 +8,11 @@ const routes: RouteProps[] = [
     path: "/",
     exact: true,
     component: loadable(() => import("./IndexPage"))
+  },
+  {
+    path: '/player/:id',
+    exact: true,
+    component: loadable(() => import('./PlayerPage'))
   }
 ];
 
