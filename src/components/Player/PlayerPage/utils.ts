@@ -62,7 +62,8 @@ export function countAwards(awards: IAward[] | null) {
     HankAaron: [] as IAwardListObject[],
     SilverSlugger: [] as IAwardListObject[],
     AllStar: [] as IAwardListObject[],
-    GoldGlove: [] as IAwardListObject[]
+    GoldGlove: [] as IAwardListObject[],
+    CyYoung: [] as IAwardListObject[]
   };
   for (const award of awards) {
     const league = award.id.slice(0, 2);
@@ -96,6 +97,10 @@ export function countAwards(awards: IAward[] | null) {
     }
     if (awardId === "AS") {
       data.AllStar.push(pData);
+      continue;
+    }
+    if (awardId === "CY") {
+      data.CyYoung.push(pData);
       continue;
     }
   }

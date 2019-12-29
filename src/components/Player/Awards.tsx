@@ -41,6 +41,7 @@ function Awards({ awards }: AwardsProps) {
       </div>
       <div className="awards">
         <Award name="All-Star" list={awards.AllStar} emoji="⭐" />
+        <Award name="Cy Young" list={awards.CyYoung} emoji="⚾" />
       </div>
     </>
   );
