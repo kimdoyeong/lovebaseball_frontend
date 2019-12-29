@@ -39,9 +39,9 @@ const Player = styled.div<PlayerProps>`
     max-width: 100%;
     align-items: center;
 
-
     ${smallTablet.max(css`
       flex-direction: column;
+      align-items: unset;
     `)}
     .profile {
       width: 270px;

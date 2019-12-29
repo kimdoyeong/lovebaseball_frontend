@@ -1,4 +1,4 @@
-import { IAward } from "./playerInterfaces";
+import { IAward, IStats } from "./playerInterfaces";
 
 export function translatePosition(position: string): string {
   switch (position) {
@@ -101,4 +101,17 @@ export function countAwards(awards: IAward[] | null) {
   }
 
   return data;
+}
+
+export function yearByYear(stats: IStats[]) {
+  for (const stat of stats) {
+    if (stat.type.displayName === "yearByYear") return stat;
+  }
+  return null;
+}
+export function getCareer(stats: IStats[]) {
+  for (const stat of stats) {
+    if (stat.type.displayName === "career") return stat.splits[0];
+  }
+  return null;
 }
