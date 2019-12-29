@@ -15,7 +15,7 @@ const Card = styled.article`
   margin: 2em;
   margin-top: 0;
   padding: 2.5em 5em;
-  font-size: 20px;
+  font-size: 18px;
   box-shadow: 0 3px 20px rgba(0, 0, 0, 0.17);
 
   ${middleDesktop.max(css`
