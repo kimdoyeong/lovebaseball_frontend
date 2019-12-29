@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import styled, { css } from "styled-components";
 import makeEmojiResponsive from "../../lib/functions/makeEmojiResponsive";
 import {
@@ -9,9 +9,17 @@ import {
   largeMobile
 } from "../../lib/viewport";
 import Button from "../Form/Button";
+import Awards from "./Awards";
+import {
+  countAwards,
+  translatePosition,
+  getHeightAndWeightToSI,
+  isHOF
+} from "./PlayerPage/utils";
+import { IPeople } from "./PlayerPage/playerInterfaces";
 
 interface PlayerProps {
-  teamColor: string;
+  playerId: number;
 }
 const Player = styled.div<PlayerProps>`
   width: 100%;
@@ -29,6 +37,8 @@ const Player = styled.div<PlayerProps>`
     display: flex;
     width: 100%;
     max-width: 100%;
+    align-items: center;
+
 
     ${smallTablet.max(css`
       flex-direction: column;
@@ -37,7 +47,8 @@ const Player = styled.div<PlayerProps>`
       width: 270px;
       height: 270px;
       border-radius: 135px;
-      background: url(https://image.chosun.com/sitedata/image/201903/20/2019032000679_0.jpg);
+      background: url(${props =>
+        `https://securea.mlb.com/mlb/images/players/head_shot/${props.playerId}.jpg`});
       background-size: cover;
       background-position: center;
 
@@ -58,7 +69,6 @@ const Player = styled.div<PlayerProps>`
       `)}
     }
     .info {
-      margin-top: 2.5em;
       margin-left: 1.5em;
       display: flex;
       flex-direction: column;
@@ -72,10 +82,13 @@ const Player = styled.div<PlayerProps>`
       `)}
 
       .personality {
+        .hof {
+          margin: 0;
+        }
         .team {
           font-size: 1em;
           margin: 0;
-          color: ${props => props.teamColor};
+          color: #8e8e8e;
         }
         .name {
           margin: 0;
@@ -139,33 +152,27 @@ const Player = styled.div<PlayerProps>`
           }
         }
       }
-      .stats-wrap {
-        overflow-x: auto;
-        margin-top: 1em;
-
-        .stats {
-          width: 100% !important;
-          td,
-          th {
-            padding: 0 0.85em;
-            word-break: keep-all;
-          }
-          thead tr th {
-            text-align: left;
-          }
-        }
-      }
     }
   }
 `;
-const MVP = makeEmojiResponsive("🏆", "MVP");
-const HankAron = makeEmojiResponsive("🎖", "Hank Aron");
-const SliverSlugger = makeEmojiResponsive("🏅", "Silver Slugger");
-const AllStar = makeEmojiResponsive("⭐", "All-star");
 const Spark = makeEmojiResponsive("✨", "spark");
-function FullSizePlayer() {
+const HOF = makeEmojiResponsive("👑", "Hall of Fame");
+interface FullSizePlayerProps {
+  player: IPeople;
+}
+function FullSizePlayer({ player }: FullSizePlayerProps) {
   const [openAwards, setOpenAwards] = useState(false);
   const [coords, setCoords] = useState([0, 0]);
+  const position = useMemo(
+    () => translatePosition(player.primaryPosition.abbreviation),
+    [player.primaryPosition.abbreviation]
+  );
+  const heightAndWeight = useMemo(
+    () => getHeightAndWeightToSI(player.height, player.weight),
+    [player.height, player.weight]
+  );
+  const isHof = useMemo(() => isHOF(player.awards), [player.awards]);
+  const awards = useMemo(() => countAwards(player.awards), [player.awards]);
 
   function openAwardsEvent(e: React.MouseEvent) {
     const minSize = 300;
@@ -188,15 +195,23 @@ function FullSizePlayer() {
     return () => window.removeEventListener("click", closeAwardsEvent);
   }, [closeAwardsEvent]);
   return (
-    <Player teamColor="#BF111A">
+    <Player playerId={player.id}>
       <div className="top">
         <div className="profile" />
         <div className="info">
           <div className="row">
             <div className="personality">
-              <h3 className="team">Los Angeles Angels</h3>
-              <h1 className="name">마이크 트라웃</h1>
-              <p className="sub">AL MVP</p>
+              {isHof && (
+                <p className="hof">
+                  <HOF />
+                  명예의 전당 ({isHof.season})
+                </p>
+              )}
+              <h3 className="team">{player.currentTeam.name}</h3>
+              <h1 className="name">{player.fullName}</h1>
+              <p className="sub">
+                {position}, {heightAndWeight}{" "}
+              </p>
             </div>
             <div className="awards-button">
               <Button onClick={openAwardsEvent}>
@@ -216,80 +231,8 @@ function FullSizePlayer() {
               <div className="close" onClick={closeAwardsEvent} role="button">
                 &times;
               </div>
-              <div className="awards">
-                <p>
-                  MVP
-                  <MVP />
-                  <MVP />
-                  <MVP />
-                </p>
-                <p>
-                  Rookie of Year <span className="sub">(2012)</span>
-                </p>
-                <p>
-                  Hank Aron Awards
-                  <HankAron />
-                  <HankAron />
-                </p>
-                <p>
-                  Sliver Slugger
-                  <SliverSlugger />
-                  <SliverSlugger />
-                  <SliverSlugger />
-                  <SliverSlugger />
-                  <SliverSlugger />
-                  <SliverSlugger />
-                  <SliverSlugger />
-                </p>
-              </div>
-              <div className="awards">
-                All-Star
-                <AllStar />
-                <AllStar />
-                <AllStar />
-                <AllStar />
-                <AllStar />
-                <AllStar />
-                <AllStar />
-                <AllStar />
-              </div>
+              <Awards awards={awards} />
             </div>
-          </div>
-          <div className="stats-wrap">
-            <table className="stats">
-              <thead>
-                <tr>
-                  <th>타수</th>
-                  <th>안타</th>
-                  <th>타점</th>
-                  <th>득점</th>
-                  <th>도루</th>
-                  <th>홈런</th>
-                  <th>타율</th>
-                  <th>출루율</th>
-                  <th>장타율</th>
-                  <th>OPS</th>
-                  <th>fWAR</th>
-                  <th>bWAR</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>470</td>
-                  <td>137</td>
-                  <td>104</td>
-                  <td>110</td>
-                  <td>11</td>
-                  <td>45</td>
-                  <td>.291</td>
-                  <td>.438</td>
-                  <td>.635</td>
-                  <td>1.083</td>
-                  <td>8.6</td>
-                  <td>8.3</td>
-                </tr>
-              </tbody>
-            </table>
           </div>
         </div>
       </div>

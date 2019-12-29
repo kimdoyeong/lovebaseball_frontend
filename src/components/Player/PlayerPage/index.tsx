@@ -1,16 +1,21 @@
-import React from 'react'
-import PlayerPageProfile from './Profile';
-import { IPeople } from './playerInterfaces';
+import React from "react";
+import { IPeople } from "./playerInterfaces";
+import FullSizePlayer from "../FullSizePlayer";
+import styled from "styled-components";
+
+const Wrap = styled.div``;
 
 interface PlayerPageProps {
-    player: {
-        player: IPeople
-    }
+  player: {
+    player: IPeople;
+  };
 }
 function PlayerPage({ player: { player } }: PlayerPageProps) {
-    return (
-        <PlayerPageProfile player={player} />
-    )
+  return (
+    <Wrap>
+      <FullSizePlayer player={player} />
+    </Wrap>
+  );
 }
 
 export default PlayerPage;

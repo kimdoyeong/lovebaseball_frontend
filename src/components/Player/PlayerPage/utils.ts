@@ -49,13 +49,13 @@ export function isHOF(awards: IAward[] | null) {
   }
   return false;
 }
-
+export interface IAwardListObject {
+  league?: string;
+  season: string;
+}
 export function countAwards(awards: IAward[] | null) {
   if (!awards) return null;
-  interface IAwardListObject {
-    league?: string;
-    season: string;
-  }
+
   const data = {
     mvp: [] as IAwardListObject[],
     rookie: false as false | string,
@@ -92,6 +92,10 @@ export function countAwards(awards: IAward[] | null) {
     }
     if (awardId === "GG") {
       data.GoldGlove.push(pData);
+      continue;
+    }
+    if (awardId === "AS") {
+      data.AllStar.push(pData);
       continue;
     }
   }

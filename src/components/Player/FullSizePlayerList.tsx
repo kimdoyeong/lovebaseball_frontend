@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import FullSizePlayer from "./FullSizePlayer";
 
 const Wrap = styled.div`
   & > * {
@@ -8,12 +7,7 @@ const Wrap = styled.div`
   }
 `;
 function FullSizePlayerList() {
-  return (
-    <Wrap>
-      <FullSizePlayer />
-      <FullSizePlayer />
-    </Wrap>
-  );
+  return <Wrap></Wrap>;
 }
 
 export default FullSizePlayerList;
