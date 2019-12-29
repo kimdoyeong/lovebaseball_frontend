@@ -7,6 +7,8 @@ const Button = styled.button`
   border: 0;
   padding: 0.5em 2em;
   border-radius: 16px;
+  white-space: nowrap;
+  word-break: keep-all;
 
   transition: background 0.5s;
   &:active,

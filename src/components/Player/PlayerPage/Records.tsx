@@ -74,7 +74,7 @@ function Records({ player }: RecordsProps) {
 
   return (
     <CardList>
-      {awards?.mvp.length && (
+      {awards && awards.mvp.length !== 0 && (
         <RecordCard
           title="MVP"
           emoji="🏆"
