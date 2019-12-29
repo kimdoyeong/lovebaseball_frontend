@@ -26,6 +26,8 @@ const Wrap = styled.div`
       height: 60px;
       margin-right: 20px;
       border-radius: 30px;
+      background-size: cover;
+      background-position: center;
     }
     .name {
       margin: 0;
@@ -38,7 +40,7 @@ function SearchElement({ fullName, code }: { fullName: string; code: string }) {
       <div
         className="profile"
         style={{
-          background: `url(https://content.mlb.com/images/headshots/current/60x60/${code}.png) no-repeat`
+          background: `url(https://content.mlb.com/images/headshots/current/60x60/${code}.png) no-repeat, gray`
         }}
       />
       <h1 className="name">{fullName}</h1>

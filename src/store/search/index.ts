@@ -61,6 +61,7 @@ export default function(state = initialState, action: ActionType): SearchType {
     case SearchActions.SEARCH:
       return {
         ...state,
+        data: [],
         fetching: true
       };
     case SearchActions.SEARCH_DONE:
