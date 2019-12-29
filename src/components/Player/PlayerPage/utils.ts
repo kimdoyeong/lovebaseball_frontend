@@ -41,7 +41,8 @@ export function getHeightAndWeightToSI(height: string, weight: number) {
   return `${cm.toFixed(0)}cm ${kg.toFixed(0)}kg`;
 }
 
-export function isHOF(awards: IAward[]) {
+export function isHOF(awards: IAward[] | null) {
+  if (!awards) return false;
   for (const award of awards) {
     if (award.id !== "MLBHOF") continue;
     return award;
@@ -49,7 +50,8 @@ export function isHOF(awards: IAward[]) {
   return false;
 }
 
-export function countAwards(awards: IAward[]) {
+export function countAwards(awards: IAward[] | null) {
+  if (!awards) return null;
   interface IAwardListObject {
     league?: string;
     season: string;
