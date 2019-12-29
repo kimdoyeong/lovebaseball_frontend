@@ -5,6 +5,7 @@ import { searchPlayer } from "../../lib/api/player";
 
 function* FetchingSaga() {
   const name = yield select((state: RootState) => state.search.search);
+  if (!name) return yield put(SearchDispatchers.searchError("빈 칸입니다."));
 
   try {
     const result = yield call(searchPlayer, name);
