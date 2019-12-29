@@ -71,14 +71,21 @@ function RecordCard({
 function Records({ player }: RecordsProps) {
   const awards = useMemo(() => countAwards(player.awards), [player.awards]);
   const isHof = useMemo(() => isHOF(player.awards), [player.awards]);
-
+  const mapper = (v: any) => v?.league + " " + v.season;
   return (
     <CardList>
       {awards && awards.mvp.length !== 0 && (
         <RecordCard
           title="MVP"
           emoji="🏆"
-          sub={awards.mvp.map(v => v?.league + " " + v.season).join(", ")}
+          sub={awards.mvp.map(mapper).join(", ")}
+        />
+      )}
+      {awards && awards.CyYoung.length !== 0 && (
+        <RecordCard
+          title="Cy Young"
+          emoji="⚾"
+          sub={awards.CyYoung.map(mapper).join(", ")}
         />
       )}
       {isHof && <RecordCard title="명예의 전당" emoji="👑" sub={isHof.date} />}
